@@ -9,6 +9,7 @@ import java.util.UUID;
 
 @Value
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+//书名
 class BookInstance {
 
     @NonNull

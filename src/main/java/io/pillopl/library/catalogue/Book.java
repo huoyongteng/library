@@ -9,6 +9,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(of = "bookIsbn")
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
+//实体
 class Book {
 
     @NonNull

@@ -16,11 +16,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class CatalogueConfiguration {
 
     @Bean
+    //目录聚合, 更像一个application?
     Catalogue catalogue(CatalogueDatabase catalogueDatabase, DomainEvents domainEvents) {
         return new Catalogue(catalogueDatabase, domainEvents);
     }
 
     @Bean
+    //目录数据库
     CatalogueDatabase catalogueDatabase(JdbcTemplate jdbcTemplate) {
         return new CatalogueDatabase(jdbcTemplate);
     }

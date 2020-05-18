@@ -2,6 +2,7 @@ package io.pillopl.library.catalogue;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -13,6 +14,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
+//配置
 class CatalogueDatabaseConfig {
 
     @Bean
@@ -31,6 +33,8 @@ class CatalogueDatabaseConfig {
     }
 
     @Bean
+
+    @Profile("!integration-test")
     DataSource dataSource() {
         return new EmbeddedDatabaseBuilder()
                 .generateUniqueName(true)

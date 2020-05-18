@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @AllArgsConstructor
+//
 public class StoreAndForwardDomainEventPublisher implements DomainEvents {
 
     private final DomainEvents eventsPublisher;

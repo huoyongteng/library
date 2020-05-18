@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 
 
 @AllArgsConstructor
+//事件发布器,装饰器,  增加统计功能
 public class MeteredDomainEventPublisher implements DomainEvents {
 
     private static final String DOMAIN_EVENTS = "domain_events";

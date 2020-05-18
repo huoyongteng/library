@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 
 @AllArgsConstructor
+//spring事件发布器
 public class JustForwardDomainEventPublisher implements DomainEvents {
 
     private final ApplicationEventPublisher applicationEventPublisher;

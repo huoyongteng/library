@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @Value
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
+//事件
 public class BookInstanceAddedToCatalogue implements DomainEvent {
 
     UUID eventId = UUID.randomUUID();

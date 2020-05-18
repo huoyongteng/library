@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
+//基础设施 DB
 class CatalogueDatabase {
 
     private final JdbcTemplate jdbcTemplate;
