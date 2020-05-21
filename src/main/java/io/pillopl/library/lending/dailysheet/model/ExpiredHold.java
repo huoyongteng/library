@@ -7,6 +7,7 @@ import io.pillopl.library.lending.patron.model.PatronId;
 import lombok.Value;
 
 @Value
+//过期图书模型
 public class ExpiredHold {
     private final BookId heldBook;
     private final PatronId patron;

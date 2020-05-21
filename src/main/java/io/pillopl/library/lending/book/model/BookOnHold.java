@@ -20,6 +20,9 @@ import java.time.Instant;
 @Value
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(of = "bookInformation")
+
+//on hold means 图书借阅被排队了
+//聚合
 public class BookOnHold implements Book {
 
     @NonNull
@@ -41,12 +44,14 @@ public class BookOnHold implements Book {
         this(new BookInformation(bookId, type), libraryBranchId, patronId, holdTill, version);
     }
 
+    //借阅人还书了的事件处理
     public AvailableBook handle(BookReturned bookReturned) {
         return new AvailableBook(
                 bookInformation, new LibraryBranchId(bookReturned.getLibraryBranchId()),
                 version);
     }
 
+    //借阅过期
     public AvailableBook handle(BookHoldExpired bookHoldExpired) {
         return new AvailableBook(
                 bookInformation,
@@ -54,6 +59,7 @@ public class BookOnHold implements Book {
                 version);
     }
 
+    //图书结账
     public CheckedOutBook handle(BookCheckedOut bookCheckedOut) {
         return new CheckedOutBook(
                 bookInformation,
@@ -62,6 +68,7 @@ public class BookOnHold implements Book {
                 version);
     }
 
+    //图书取消hold
     public AvailableBook handle(BookHoldCanceled bookHoldCanceled) {
         return new AvailableBook(
                 bookInformation, new LibraryBranchId(bookHoldCanceled.getLibraryBranchId()),

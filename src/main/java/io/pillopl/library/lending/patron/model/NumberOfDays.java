@@ -3,6 +3,9 @@ package io.pillopl.library.lending.patron.model;
 import lombok.Value;
 
 @Value
+/**
+ * 值对象
+ */
 public class NumberOfDays {
 
     int days;

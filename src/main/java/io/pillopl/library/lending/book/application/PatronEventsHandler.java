@@ -16,13 +16,16 @@ import static io.vavr.API.Case;
 import static io.vavr.Predicates.instanceOf;
 
 @AllArgsConstructor
+//从Book视角看到的借阅人相关事件的处理器
 public class PatronEventsHandler {
 
     private final BookRepository bookRepository;
     private final DomainEvents domainEvents;
 
+
     @EventListener
     void handle(BookPlacedOnHold bookPlacedOnHold) {
+        //图书被申请onhold事件事件
         bookRepository.findBy(new BookId(bookPlacedOnHold.getBookId()))
                 .map(book -> handleBookPlacedOnHold(book, bookPlacedOnHold))
                 .map(this::saveBook);
@@ -30,6 +33,7 @@ public class PatronEventsHandler {
 
     @EventListener
     void handle(BookCheckedOut bookCheckedOut) {
+        //图书被借出事件
         bookRepository.findBy(new BookId(bookCheckedOut.getBookId()))
                 .map(book -> handleBookCheckedOut(book, bookCheckedOut))
                 .map(this::saveBook);
@@ -37,6 +41,7 @@ public class PatronEventsHandler {
 
     @EventListener
     void handle(BookHoldExpired holdExpired) {
+        //图书被申请人onhold过期
         bookRepository.findBy(new BookId(holdExpired.getBookId()))
                 .map(book -> handleBookHoldExpired(book, holdExpired))
                 .map(this::saveBook);
@@ -44,13 +49,15 @@ public class PatronEventsHandler {
 
     @EventListener
     void handle(BookHoldCanceled holdCanceled) {
+        //图书被onhold取消
         bookRepository.findBy(new BookId(holdCanceled.getBookId()))
-                .map(book -> handleBookHoldCanceled(book,  holdCanceled))
+                .map(book -> handleBookHoldCanceled(book, holdCanceled))
                 .map(this::saveBook);
     }
 
     @EventListener
     void handle(BookReturned bookReturned) {
+        //图书被返回
         bookRepository.findBy(new BookId(bookReturned.getBookId()))
                 .map(book -> handleBookReturned(book, bookReturned))
                 .map(this::saveBook);
@@ -59,14 +66,22 @@ public class PatronEventsHandler {
 
     private Book handleBookPlacedOnHold(Book book, BookPlacedOnHold bookPlacedOnHold) {
         return API.Match(book).of(
+                //如果是可用图书被onhold,直接操作,并记录事件
                 Case($(instanceOf(AvailableBook.class)), availableBook -> availableBook.handle(bookPlacedOnHold)),
+                //已经被onhold,并且被不同人hold,发布冲突事件,返回onHold
                 Case($(instanceOf(BookOnHold.class)), bookOnHold -> raiseDuplicateHoldFoundEvent(bookOnHold, bookPlacedOnHold)),
+                //其他情况
                 Case($(), () -> book)
         );
     }
 
+
+    //Q1:有违迪米特法则, 目前客户端需要知道BOOK是那种类型,再调用相应行为
+    // 可以考虑状态模式解决这个问题
+
+
     private BookOnHold raiseDuplicateHoldFoundEvent(BookOnHold onHold, BookPlacedOnHold bookPlacedOnHold) {
-        if(onHold.by(new PatronId(bookPlacedOnHold.getPatronId()))) {
+        if (onHold.by(new PatronId(bookPlacedOnHold.getPatronId()))) {
             return onHold;
         }
         domainEvents.publish(

@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 @AllArgsConstructor
 //spring事件发布器
+//不能回滚?
 public class JustForwardDomainEventPublisher implements DomainEvents {
 
     private final ApplicationEventPublisher applicationEventPublisher;

@@ -11,6 +11,9 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode
 @Getter
+/**
+ * 超期读者时间
+ */
 class OverdueCheckoutDatabaseEntity {
 
     @Id

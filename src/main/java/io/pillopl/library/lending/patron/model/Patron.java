@@ -27,6 +27,9 @@ import static io.pillopl.library.lending.patron.model.Rejection.withReason;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(of = "patron")
+/**
+ * 借阅人实体
+ */
 public class Patron {
 
     @NonNull
@@ -45,11 +48,19 @@ public class Patron {
         return placeOnHold(book, HoldDuration.openEnded());
     }
 
+    /**
+     * 申请onhold一本书
+     *
+     * @param aBook
+     * @param duration
+     * @return
+     */
     public Either<BookHoldFailed, BookPlacedOnHoldEvents> placeOnHold(AvailableBook aBook, HoldDuration duration) {
         Option<Rejection> rejection = patronCanHold(aBook, duration);
         if (rejection.isEmpty()) {
             BookPlacedOnHold bookPlacedOnHold = bookPlacedOnHoldNow(aBook.getBookId(), aBook.type(), aBook.getLibraryBranch(), patron.getPatronId(), duration);
             if (patronHolds.maximumHoldsAfterHolding(aBook)) {
+                //超出限制了,发了两个事件
                 return announceSuccess(events(bookPlacedOnHold, MaximumNumberOhHoldsReached.now(patron, MAX_NUMBER_OF_HOLDS)));
             }
             return announceSuccess(events(bookPlacedOnHold));
@@ -64,6 +75,14 @@ public class Patron {
         return announceFailure(holdCancelingFailedNow(book.getBookId(), book.getHoldPlacedAt(), patron.getPatronId()));
     }
 
+    /**
+     * 借阅人聚合
+     * checkout: 借阅人借书, 有可能成功,有可能失败
+     *
+     * @param book
+     * @param duration
+     * @return
+     */
     public Either<BookCheckingOutFailed, BookCheckedOut> checkOut(BookOnHold book, CheckoutDuration duration) {
         if (patronHolds.a(book)) {
             return announceSuccess(bookCheckedOutNow(book.getBookId(), book.type(), book.getHoldPlacedAt(), patron.getPatronId(), duration));
@@ -71,6 +90,13 @@ public class Patron {
         return announceFailure(bookCheckingOutFailedNow(withReason("book is not on hold by patron"), book.getBookId(), book.getHoldPlacedAt(), patron));
     }
 
+    /**
+     * 判断借阅者是研究人员还是普通读者,根据权限返回是否可以借用
+     *
+     * @param aBook
+     * @param forDuration
+     * @return
+     */
     private Option<Rejection> patronCanHold(AvailableBook aBook, HoldDuration forDuration) {
         return placingOnHoldPolicies
                 .toStream()
@@ -90,7 +116,6 @@ public class Patron {
     public int numberOfHolds() {
         return patronHolds.count();
     }
-
 
 
 }

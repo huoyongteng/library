@@ -88,14 +88,18 @@ class SheetsReadModel implements DailySheet {
     @Override
     @Transactional
     @EventListener
+    //更新投射模型
     public void handle(BookPlacedOnHold event) {
         try {
             createNewHold(event);
         } catch (DuplicateKeyException ex) {
             //idempotent operation
+            //错误控制
+            //支付订单,机构订单都可以这么搞. 太好了
         }
     }
 
+    //更新投射模型 申请了onhold
     private void createNewHold(BookPlacedOnHold event) {
         sheets.update("INSERT INTO holds_sheet " +
                         "(id, book_id, status, hold_event_id, hold_by_patron_id, hold_at, hold_till, expired_at, canceled_at, hold_at_branch, checked_out_at) VALUES " +
@@ -111,6 +115,7 @@ class SheetsReadModel implements DailySheet {
 
 
     @Override
+    //更新投射模型 取消了onhold申请
     public void handle(BookHoldCanceled event) {
         sheets.update("UPDATE holds_sheet SET canceled_at = ?, status = 'CANCELED' WHERE canceled_at IS NULL AND book_id = ? AND hold_by_patron_id = ?",
                 from(event.getWhen()),
@@ -120,6 +125,7 @@ class SheetsReadModel implements DailySheet {
 
     @Override
     @EventListener
+    //更新投射模型
     public void handle(BookHoldExpired event) {
         sheets.update("UPDATE holds_sheet SET expired_at = ?, status = 'EXPIRED' WHERE expired_at IS NULL AND book_id = ? AND hold_by_patron_id = ?",
                 from(event.getWhen()),
@@ -131,12 +137,18 @@ class SheetsReadModel implements DailySheet {
     @EventListener
     public void handle(BookCheckedOut event) {
         try {
+
             createNewCheckout(event);
         } catch (DuplicateKeyException ex) {
             //idempotent operation
         }
     }
 
+    /**
+     * 入口持久化,要记录谁谁谁借了书!
+     *
+     * @param event
+     */
     private void createNewCheckout(BookCheckedOut event) {
         sheets.update("INSERT INTO checkouts_sheet " +
                         "(id, book_id, status, checkout_event_id, checked_out_by_patron_id, checked_out_at, checkout_till, checked_out_at_branch, returned_at) VALUES " +

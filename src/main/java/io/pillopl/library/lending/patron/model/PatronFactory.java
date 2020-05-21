@@ -11,7 +11,13 @@ import static io.pillopl.library.lending.patron.model.PlacingOnHoldPolicy.allCur
 import static java.util.stream.Collectors.toSet;
 
 public class PatronFactory {
-
+    /**
+     * @param patronType
+     * @param patronId
+     * @param patronHolds
+     * @param overdueCheckouts
+     * @return
+     */
     public Patron create(PatronType patronType, PatronId patronId, Set<Tuple2<BookId, LibraryBranchId>> patronHolds, Map<LibraryBranchId, Set<BookId>> overdueCheckouts) {
         return new Patron(new PatronInformation(patronId, patronType),
                 allCurrentPolicies(),

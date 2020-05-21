@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @AllArgsConstructor
-//
+//存到数据库,  测试专用的一个
 public class StoreAndForwardDomainEventPublisher implements DomainEvents {
 
     private final DomainEvents eventsPublisher;

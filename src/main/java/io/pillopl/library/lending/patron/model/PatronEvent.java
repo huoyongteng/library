@@ -21,13 +21,16 @@ public interface PatronEvent extends DomainEvent {
     UUID getPatronId();
 
     default UUID getAggregateId() {
-       return getPatronId();
+        return getPatronId();
     }
 
     default List<DomainEvent> normalize() {
         return List.of(this);
     }
 
+    /**
+     * 阅读者创建了呢
+     */
     @Value
     class PatronCreated implements PatronEvent {
         @NonNull UUID eventId = UUID.randomUUID();
@@ -40,6 +43,9 @@ public interface PatronEvent extends DomainEvent {
         }
     }
 
+    /**
+     * 读者申请onhold了一本书
+     */
     @Value
     class BookPlacedOnHold implements PatronEvent {
         @NonNull UUID eventId = UUID.randomUUID();
@@ -63,6 +69,9 @@ public interface PatronEvent extends DomainEvent {
         }
     }
 
+    /**
+     * 批量申请onhold
+     */
     @Value
     class BookPlacedOnHoldEvents implements PatronEvent {
         @NonNull UUID eventId = UUID.randomUUID();
@@ -88,6 +97,9 @@ public interface PatronEvent extends DomainEvent {
         }
     }
 
+    /**
+     * 已达到最大申请onhold的限制
+     */
     @Value
     class MaximumNumberOhHoldsReached implements PatronEvent {
         @NonNull UUID eventId = UUID.randomUUID();
@@ -103,6 +115,9 @@ public interface PatronEvent extends DomainEvent {
         }
     }
 
+    /**
+     * 图书已经被借到手了
+     */
     @Value
     class BookCheckedOut implements PatronEvent {
         @NonNull UUID eventId = UUID.randomUUID();
@@ -124,6 +139,9 @@ public interface PatronEvent extends DomainEvent {
         }
     }
 
+    /**
+     * 图书被换回来了
+     */
     @Value
     class BookReturned implements PatronEvent {
         @NonNull UUID eventId = UUID.randomUUID();
@@ -134,6 +152,9 @@ public interface PatronEvent extends DomainEvent {
         @NonNull UUID libraryBranchId;
     }
 
+    /**
+     * 图书申请onhold失败
+     */
     @Value
     class BookHoldFailed implements PatronEvent {
         @NonNull UUID eventId = UUID.randomUUID();
@@ -152,6 +173,10 @@ public interface PatronEvent extends DomainEvent {
                     libraryBranchId.getLibraryBranchId());
         }
     }
+
+    /**
+     * 图书checkout失败
+     */
 
     @Value
     class BookCheckingOutFailed implements PatronEvent {
@@ -172,6 +197,9 @@ public interface PatronEvent extends DomainEvent {
         }
     }
 
+    /**
+     * 图书onhold取消了
+     */
     @Value
     class BookHoldCanceled implements PatronEvent {
         @NonNull UUID eventId = UUID.randomUUID();
@@ -189,6 +217,9 @@ public interface PatronEvent extends DomainEvent {
         }
     }
 
+    /**
+     * 图书取消失败了.
+     */
     @Value
     class BookHoldCancelingFailed implements PatronEvent {
         @NonNull UUID eventId = UUID.randomUUID();
@@ -206,6 +237,9 @@ public interface PatronEvent extends DomainEvent {
         }
     }
 
+    /**
+     * 图书申请onhold过期了
+     */
     @Value
     class BookHoldExpired implements PatronEvent {
         @NonNull UUID eventId = UUID.randomUUID();
@@ -223,6 +257,9 @@ public interface PatronEvent extends DomainEvent {
         }
     }
 
+    /**
+     * 记录超期不还事件
+     */
     @Value
     class OverdueCheckoutRegistered implements PatronEvent {
         @NonNull UUID eventId = UUID.randomUUID();

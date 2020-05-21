@@ -37,13 +37,13 @@ public class CheckedOutBook implements Book {
         return bookInformation.getBookId();
     }
 
+    //还书
     public AvailableBook handle(PatronEvent.BookReturned bookReturnedByPatron) {
         return new AvailableBook(
                 bookInformation,
                 new LibraryBranchId(bookReturnedByPatron.getLibraryBranchId()),
                 version);
     }
-
 
 
 }

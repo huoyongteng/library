@@ -6,6 +6,9 @@ import lombok.NonNull;
 import lombok.Value;
 
 @Value
+/**
+ * 值对象, 书在哪个图书分馆
+ */
 class Hold {
 
     @NonNull BookId bookId;

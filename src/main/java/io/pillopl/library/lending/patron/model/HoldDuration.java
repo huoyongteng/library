@@ -7,6 +7,9 @@ import java.time.Duration;
 import java.time.Instant;
 
 @Value
+/**
+ * 值对象
+ */
 public class HoldDuration {
 
     Instant from;

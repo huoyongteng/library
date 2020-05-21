@@ -11,6 +11,7 @@ import java.util.UUID;
 @Value
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 //事件
+//添加书数量到目录
 public class BookInstanceAddedToCatalogue implements DomainEvent {
 
     UUID eventId = UUID.randomUUID();

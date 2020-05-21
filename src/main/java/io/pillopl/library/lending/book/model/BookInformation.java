@@ -8,7 +8,7 @@ import lombok.Value;
 
 @Value
 public class BookInformation {
-
+//值对象
     @NonNull
     BookId bookId;
 

@@ -33,7 +33,7 @@ class CatalogueDatabaseConfig {
     }
 
     @Bean
-
+//Profile 功能
     @Profile("!integration-test")
     DataSource dataSource() {
         return new EmbeddedDatabaseBuilder()

@@ -10,6 +10,9 @@ import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
+/**
+ * 读者持有图书
+ */
 class HoldDatabaseEntity {
 
     @Id
@@ -27,7 +30,7 @@ class HoldDatabaseEntity {
     }
 
     boolean is(UUID patronId, UUID bookId, UUID libraryBranchId) {
-        return  this.patronId.equals(patronId) &&
+        return this.patronId.equals(patronId) &&
                 this.bookId.equals(bookId) &&
                 this.libraryBranchId.equals(libraryBranchId);
     }

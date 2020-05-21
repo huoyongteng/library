@@ -11,7 +11,7 @@ import static io.pillopl.library.commons.commands.Result.Success;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 //目录(聚合)
-//在聚合里持久化
+//在聚合里持久化事件
 public class Catalogue {
 
     private final CatalogueDatabase database;
@@ -36,7 +36,7 @@ public class Catalogue {
                 .getOrElse(Rejection));
     }
 
-    //持久行为
+    //持久化保存上架书, 行为
     private BookInstance saveAndPublishEvent(BookInstance bookInstance) {
         database.saveNew(bookInstance);
         //发布图书上架信息

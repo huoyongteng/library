@@ -10,6 +10,9 @@ import static io.pillopl.library.lending.patron.model.NumberOfDays.of;
 import static java.time.Instant.now;
 
 @Value
+/**
+ * 值对象
+ */
 public class CheckoutDuration {
 
     static final int MAX_CHECKOUT_DURATION  = 60;

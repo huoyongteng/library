@@ -16,6 +16,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 
+/**
+ * spring 初始化Bean
+ */
 @Configuration
 @EnableJdbcRepositories
 public class PatronConfiguration {
@@ -25,6 +28,13 @@ public class PatronConfiguration {
         return new CheckingOutBookOnHold(findBookOnHold, patronRepository);
     }
 
+    /**
+     * 发现逾期不还借阅人
+     *
+     * @param dailySheet
+     * @param patronRepository
+     * @return
+     */
     @Bean
     RegisteringOverdueCheckout registeringOverdueCheckout(DailySheet dailySheet, Patrons patronRepository) {
         return new RegisteringOverdueCheckout(dailySheet, patronRepository);
@@ -50,6 +60,13 @@ public class PatronConfiguration {
         return new PlacingOnHold(findAvailableBook, patronRepository);
     }
 
+    /**
+     * 这是大佬啊啊, 数据库存好事件处理结果,再分发spring-event
+     *
+     * @param patronEntityRepository
+     * @param domainEvents
+     * @return
+     */
     @Bean
     Patrons patronRepository(PatronEntityRepository patronEntityRepository,
                              DomainEvents domainEvents) {

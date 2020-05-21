@@ -8,8 +8,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @Configuration
 public class PatronProfileConfiguration {
 
-    @Bean
-    public PatronProfiles patronProfilesReadModel(JdbcTemplate jdbcTemplate) {
-        return new PatronProfileReadModel(jdbcTemplate);
-    }
+  /**
+   * @param jdbcTemplate
+   * @return
+   */
+  @Bean
+  public PatronProfiles patronProfilesReadModel(JdbcTemplate jdbcTemplate) {
+    return new PatronProfileReadModel(jdbcTemplate);
+  }
 }

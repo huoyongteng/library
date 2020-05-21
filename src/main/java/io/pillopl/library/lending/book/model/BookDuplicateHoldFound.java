@@ -8,6 +8,9 @@ import java.time.Instant;
 import java.util.UUID;
 
 
+/**
+ * 重复持有被发现了!!!!  类似订单被重复支付了.
+ */
 @Value
 public class BookDuplicateHoldFound implements DomainEvent {
     @NonNull UUID eventId = UUID.randomUUID();

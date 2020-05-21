@@ -11,6 +11,7 @@ import java.util.Set;
 import static java.util.Collections.emptySet;
 
 @Value
+//过期不还的借阅书
 class OverdueCheckouts {
 
     static int MAX_COUNT_OF_OVERDUE_RESOURCES = 2;

@@ -9,7 +9,9 @@ import java.util.Set;
 
 @Value
 class PatronHolds {
-
+    /**
+     * 最大五本?
+     */
     static int MAX_NUMBER_OF_HOLDS = 5;
 
     Set<Hold> resourcesOnHold;

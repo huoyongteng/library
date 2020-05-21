@@ -8,9 +8,9 @@ import lombok.Value;
 import java.time.Instant;
 
 @Value
+/** application 的command */
 public class CancelHoldCommand {
-    @NonNull Instant timestamp;
-    @NonNull PatronId patronId;
-    @NonNull BookId bookId;
-
+  @NonNull Instant timestamp;
+  @NonNull PatronId patronId;
+  @NonNull BookId bookId;
 }

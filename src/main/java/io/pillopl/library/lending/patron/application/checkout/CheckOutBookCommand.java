@@ -4,11 +4,15 @@ import io.pillopl.library.catalogue.BookId;
 import io.pillopl.library.lending.librarybranch.model.LibraryBranchId;
 import io.pillopl.library.lending.patron.model.CheckoutDuration;
 import io.pillopl.library.lending.patron.model.PatronId;
-import java.time.Instant;
 import lombok.NonNull;
 import lombok.Value;
 
+import java.time.Instant;
+
 @Value
+/**
+ * 图书借阅命令, 一般应用层接受http消息,mq消息后创建
+ */
 public class CheckOutBookCommand {
     @NonNull Instant timestamp;
     @NonNull PatronId patronId;

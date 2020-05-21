@@ -7,6 +7,9 @@ import lombok.NonNull;
 import lombok.Value;
 
 @Value
+/**
+ * 过期的checkout视图
+ */
 public class CheckoutsToOverdueSheet {
 
     @NonNull

@@ -20,43 +20,48 @@ import static io.vavr.Patterns.$Left;
 import static io.vavr.Patterns.$Right;
 
 @AllArgsConstructor
+/** application comments */
 public class CancelingHold {
 
-    private final FindBookOnHold findBookOnHold;
-    private final Patrons patronRepository;
+  private final FindBookOnHold findBookOnHold;
+  private final Patrons patronRepository;
 
-    public Try<Result> cancelHold(@NonNull CancelHoldCommand command) {
-        return Try.of(() -> {
-            BookOnHold bookOnHold = find(command.getBookId(), command.getPatronId());
-            Patron patron = find(command.getPatronId());
-            Either<BookHoldCancelingFailed, BookHoldCanceled> result = patron.cancelHold(bookOnHold);
-            return Match(result).of(
-                    Case($Left($()), this::publishEvents),
-                    Case($Right($()), this::publishEvents)
-            );
+  public Try<Result> cancelHold(@NonNull CancelHoldCommand command) {
+    return Try.of(
+        () -> {
+          BookOnHold bookOnHold = find(command.getBookId(), command.getPatronId());
+          Patron patron = find(command.getPatronId());
+          Either<BookHoldCancelingFailed, BookHoldCanceled> result = patron.cancelHold(bookOnHold);
+          return Match(result)
+              .of(Case($Left($()), this::publishEvents), Case($Right($()), this::publishEvents));
         });
-    }
+  }
 
-    private Result publishEvents(BookHoldCanceled bookHoldCanceled) {
-        patronRepository.publish(bookHoldCanceled);
-        return Success;
-    }
+  private Result publishEvents(BookHoldCanceled bookHoldCanceled) {
+    patronRepository.publish(bookHoldCanceled);
+    return Success;
+  }
 
-    private Result publishEvents(BookHoldCancelingFailed bookHoldCancelingFailed) {
-        patronRepository.publish(bookHoldCancelingFailed);
-        return Rejection;
-    }
+  private Result publishEvents(BookHoldCancelingFailed bookHoldCancelingFailed) {
+    patronRepository.publish(bookHoldCancelingFailed);
+    return Rejection;
+  }
 
-    private BookOnHold find(BookId bookId, PatronId patronId) {
-        return findBookOnHold
-                .findBookOnHold(bookId, patronId)
-                .getOrElseThrow(() -> new IllegalArgumentException("Cannot find book on hold with Id: " + bookId.getBookId()));
-    }
+  private BookOnHold find(BookId bookId, PatronId patronId) {
+    return findBookOnHold
+        .findBookOnHold(bookId, patronId)
+        .getOrElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    "Cannot find book on hold with Id: " + bookId.getBookId()));
+  }
 
-    private Patron find(PatronId patronId) {
-        return patronRepository
-                .findBy(patronId)
-                .getOrElseThrow(() -> new IllegalArgumentException("Patron with given Id does not exists: " + patronId.getPatronId()));
-    }
+  private Patron find(PatronId patronId) {
+    return patronRepository
+        .findBy(patronId)
+        .getOrElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    "Patron with given Id does not exists: " + patronId.getPatronId()));
+  }
 }
-

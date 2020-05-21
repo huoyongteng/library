@@ -18,6 +18,7 @@ public class CreateAvailableBookOnInstanceAddedEventHandler {
 
     @EventListener
     void handle(BookInstanceAddedToCatalogue event) {
+        //收到书实体添加到目录的时间后,保存可用书`
         bookRepository.save(new AvailableBook(new BookId(event.getBookId()), event.getType(), ourLibraryBranch(), Version.zero()));
     }
 

@@ -28,7 +28,7 @@ class PatronDatabaseEntity {
     Set<HoldDatabaseEntity> booksOnHold;
     Set<OverdueCheckoutDatabaseEntity> checkouts;
 
-     PatronDatabaseEntity(PatronId patronId, PatronType patronType) {
+    PatronDatabaseEntity(PatronId patronId, PatronType patronType) {
         this.patronId = patronId.getPatronId();
         this.patronType = patronType;
         this.booksOnHold = new HashSet<>();
@@ -50,10 +50,12 @@ class PatronDatabaseEntity {
 
     private PatronDatabaseEntity handle(BookPlacedOnHoldEvents placedOnHoldEvents) {
         BookPlacedOnHold event = placedOnHoldEvents.getBookPlacedOnHold();
+        //告警,发短信之类的,提醒用户已经超限了
         return handle(event);
     }
 
     private PatronDatabaseEntity handle(BookPlacedOnHold event) {
+        //比较操蛋, 这个book也是需要处理进行持久化处理,但是这里没有, 想一下哈, 如果处理的话,在Patron实体中操作好吗?
         booksOnHold.add(new HoldDatabaseEntity(event.getBookId(), event.getPatronId(), event.getLibraryBranchId(), event.getHoldTill()));
         return this;
     }
